@@ -36,3 +36,16 @@ model User{
   updated_at DateTime @default(now())
   
 }
+
+model Product{
+  @@map("products")
+  id Int @id() @default(autoincrement())
+  name String
+  quantity Int
+  category String
+  description String
+  price Float
+  is_active Boolean @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
