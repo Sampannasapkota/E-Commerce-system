@@ -34,6 +34,7 @@ model User{
   role Role @relation(fields: [role_id], references: [id])
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
+  carts Cart[]
   
 }
 
@@ -48,4 +49,19 @@ model Product{
   is_active Boolean @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
+  carts Cart[]
+}
+
+model Cart{
+  @@map("carts")
+  id Int @id() @default(autoincrement())
+  user_id Int
+  product_id Int 
+  quantity Int
+  product Product @relation(fields: [product_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+
 }

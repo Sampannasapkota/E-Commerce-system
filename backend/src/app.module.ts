@@ -8,9 +8,10 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { ProductsModule } from './products/products.module';
+import { CartsModule } from './carts/carts.module';
 
 @Module({
-  imports: [PrismaModule, RolesModule, UsersModule,AuthModule, ConfigModule.forRoot(), ProductsModule],
+  imports: [PrismaModule, RolesModule, UsersModule,AuthModule, ConfigModule.forRoot(), ProductsModule, CartsModule],
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })
