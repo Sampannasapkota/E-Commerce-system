@@ -6,7 +6,6 @@ import {
 import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 @Injectable()
 export class CartsService {
@@ -42,14 +41,51 @@ export class CartsService {
   }
 
   findOne(id: number) {
-    return this.prismaService.cart.findFirst();
+    return this.getCartsById(id);
   }
 
-  update(id: number, updateCartDto: UpdateCartDto) {
-    return `This action updates a #${id} cart`;
+  async update(id: number, updateCartDto: UpdateCartDto) {
+    const cartExists = await this.prismaService.cart.findUnique({
+      where: { id },
+    });
+    if (!cartExists) {
+      throw new BadRequestException(`Cart with ID ${id} not found`);
+    }
+    const userExists = await this.prismaService.user.findUnique({
+      where: { id: updateCartDto.user_id },
+    });
+    if (!userExists) {
+      throw new BadRequestException(
+        `User with ID ${updateCartDto.user_id} not found`,
+      );
+    }
+    const productExists = await this.prismaService.product.findUnique({
+      where: { id: updateCartDto.product_id },
+    });
+    if (!productExists) {
+      throw new BadRequestException(
+        `Product with ID ${updateCartDto.product_id} not found`,
+      );
+    }
+    return this.prismaService.cart.update({
+      where: { id },
+      data: {
+        quantity: updateCartDto.quantity,
+        user_id: updateCartDto.user_id,
+        product_id: updateCartDto.product_id,
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} cart`;
+  async remove(id: number) {
+    await this.getCartsById(id);
+    return this.prismaService.cart.delete({ where: { id } });
+  }
+  private async getCartsById(id: number) {
+    const cart = await this.prismaService.cart.findFirst({ where: { id } });
+    if (!cart) {
+      throw new BadRequestException(`Cart with id ${id} does not exist.`);
+    }
+    return cart;
   }
 }

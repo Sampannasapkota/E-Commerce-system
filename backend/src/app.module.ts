@@ -9,9 +9,12 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { ProductsModule } from './products/products.module';
 import { CartsModule } from './carts/carts.module';
+import { OrdersModule } from './orders/orders.module';
+import { OrderItemsModule } from './order-items/order-items.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
-  imports: [PrismaModule, RolesModule, UsersModule,AuthModule, ConfigModule.forRoot(), ProductsModule, CartsModule],
+  imports: [PrismaModule, RolesModule, UsersModule,AuthModule, ConfigModule.forRoot(), ProductsModule, CartsModule, OrdersModule, OrderItemsModule, PaymentsModule],
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })

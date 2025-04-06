@@ -65,3 +65,52 @@ model Cart{
 
 
 }
+model Order{
+  @@map("orders")
+  id Int @id() @default(autoincrement())
+  user_id Int
+  product_id Int
+  quantity Int
+  order_status Order_Status @default(pending)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  orderItems Order_Item[]
+  payment Payment[]
+
+}
+model Order_Item{
+  @@map("orderItems")
+  id Int @id() @default(autoincrement())
+  order_id Int
+  order Order @relation(references: [id], fields: [order_id])
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+}
+model Payment{
+  @@map("payments")
+  id Int @id() @default(autoincrement())
+  order_id Int
+  order Order @relation(fields: [order_id], references: [id])
+  payment_type Payment_Type @default(cash)
+  payment_status Payment_Status @default(pending)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+}
+enum Order_Status{
+  pending
+  shipped
+  delivered
+  cancelled
+}
+enum Payment_Type{
+  cash
+  online
+  cheque
+}
+enum Payment_Status{
+  pending
+  failed
+  completed
+}
