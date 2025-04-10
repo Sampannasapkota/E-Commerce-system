@@ -19,9 +19,6 @@ import { Users } from './entities/users.entity';
 export class UsersService {
   constructor(private readonly prismaService: PrismaService) {}
   async create(createUserDto: CreateUserDto) {
-    const roleService = new RolesService(this.prismaService);
-    await roleService.findOne(createUserDto.role_id);
-
     const roleObj = await this.prismaService.role.findFirst({
       where: { name: createUserDto.role },
     });
