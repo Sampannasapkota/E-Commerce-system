@@ -1,9 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { UsersService } from 'src/users/users.service';
+import { compare } from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -30,6 +35,9 @@ export class AuthService {
     });
     if (!user) {
       throw new NotFoundException('Unable to find user');
+    }
+    if (!(await compare(loginDto.password, user.password))) {
+      throw new UnauthorizedException('Invalid Credentials!');
     }
     const token = await this.jwtService.signAsync(user);
     return {

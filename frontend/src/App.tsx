@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router";
 import Login from "./pages/loginandsignup/login.tsx";
 import AppLayout from "./components/appLayout";
 import Signup from "./pages/loginandsignup/signup.tsx";
+import Dashboard from "./components/dashboard.tsx";
 
 const ProtectedRoutes = () => {
   const { token } = useAuth();
@@ -16,6 +17,8 @@ function App() {
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Signup />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+
       <Route path="/homepage" element={<ProtectedRoutes />}></Route>
     </Routes>
   );

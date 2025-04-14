@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { useAuth } from "../../context/authContext";
 import { api } from "../../api";
 import CustomInput from "../../components/customInput.jsx";
+import "./login.css";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export default function Login() {
       console.log("Token:", token);
       console.log(response);
       login(token);
-      navigate("/homepage");
+      navigate("/dashboard");
     } catch (error: any) {
       console.error(error);
       setError(error.response.data.message);
@@ -30,21 +31,32 @@ export default function Login() {
   };
   return (
     <div className="form-container">
-      <form className="login-form" onSubmit={handleSubmit}>
-        <h1 className="header">Login</h1>
-        <CustomInput
-          label="Email"
-          placeholder="Enter your email"
-          setValue={setEmail}
-        />
-        <CustomInput
-          label="Password"
-          placeholder="Enter your password"
-          setValue={setPassword}
-        />
-        {error && <p className="error">{error}</p>}
-        <button type="submit">login</button>
-      </form>
+      <button
+        className="back-button"
+        onClick={() => {
+          navigate("/register");
+        }}
+      >
+        Signup
+      </button>
+      <div className="login-form">
+        <h1 className="header">Login to meroDokan</h1>
+
+        <form onSubmit={handleSubmit}>
+          <CustomInput
+            label="Email"
+            placeholder="Enter your email"
+            setValue={setEmail}
+          />
+          <CustomInput
+            label="Password"
+            placeholder="Enter your password"
+            setValue={setPassword}
+          />
+          {error && <p className="error">{error}</p>}
+          <button type="submit">login</button>
+        </form>
+      </div>
     </div>
   );
 }

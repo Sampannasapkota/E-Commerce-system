@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "name": "Acer Aspire E15",
+    "quantity": 10,
+    "category": "laptop",
+    "description": "This is newly launched acer laptop with good spec",
+    "price": 179000
+  },
+  {
+    "id": 1,
+    "name": "fridge",
+    "quantity": 8,
+    "category": "kitchen",
+    "description": "This is newly launched fridge with good spec",
+    "price": 179000
+  },
+  {
+    "id": 1,
+    "name": "Acer",
+    "quantity": 10,
+    "category": "oven",
+    "description": "This is newly launched oven with good spec",
+    "price": 179000
+  },
+  {
+    "id": 1,
+    "name": "Samsung S1 ",
+    "quantity": 12,
+    "category": "mobile",
+    "description": "This is newly launched mobile with good spec",
+    "price": 19000
+  }
+]

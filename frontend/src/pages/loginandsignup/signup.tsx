@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { api } from "../../api";
 import CustomInput from "../../components/customInput";
+import "./signup.css";
 
 const Signup = () => {
   const [fullname, setFullname] = useState("");
@@ -28,7 +29,7 @@ const Signup = () => {
         password,
       });
       console.log(response);
-      navigate("/");
+      navigate("/dashboard");
       localStorage.setItem("token", response.data.token);
     } catch (error: any) {
       console.log(error);
@@ -43,7 +44,7 @@ const Signup = () => {
           navigate("/login");
         }}
       >
-        Back
+        Login
       </button>
       <form onSubmit={handleSubmit} className="signup-form">
         <h2>Signup</h2>
