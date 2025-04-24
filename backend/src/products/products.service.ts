@@ -63,7 +63,7 @@ export class ProductsService {
     );
     if (!this.checkIfProductExist(updateProductDto.name, id)) {
       throw new BadRequestException(
-        `Role ${updateProductDto.name} has already been taken`,
+        `Product ${updateProductDto.name} has already been taken`,
       );
     }
 

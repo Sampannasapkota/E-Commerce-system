@@ -20,6 +20,7 @@ model Role{
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
   users User[]
+  sellers Seller[]
   
 }
 model User{
@@ -37,16 +38,35 @@ model User{
   carts Cart[]
   
 }
+model Seller{
+  @@map("sellers")
+  id Int @id() @default(autoincrement())
+  role_id Int 
+  fullname String
+  email String @unique()
+  phone_no String @unique()
+  pan_no String @unique()
+  address String
+  password String 
+  role Role @relation(references: [id], fields: [role_id])
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  products Product[]
+
+
+}
 
 model Product{
   @@map("products")
   id Int @id() @default(autoincrement())
+  seller_id Int
   name String
   quantity Int
   category String
   description String
   price Float
   is_active Boolean @default(true)
+  seller Seller @relation(references: [id], fields: [seller_id])
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
   carts Cart[]

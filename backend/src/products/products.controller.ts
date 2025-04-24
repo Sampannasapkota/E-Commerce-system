@@ -12,6 +12,7 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { CommonQuery } from 'src/interfaces/query.interface';
+import { Public } from 'src/helper/public';
 
 @Controller('products')
 export class ProductsController {
@@ -23,6 +24,7 @@ export class ProductsController {
   }
 
   @Get()
+  @Public()
   findAll(
     @Query('skip') skip?: string,
     @Query('take') take?: string,

@@ -1,12 +1,39 @@
+// import axios from 'axios';
+// import React, { useEffect, useState } from 'react';
+
+// function ProductsList() {
+//   // const [products, setProducts] = useState([]);
+//   // const [error, setError] = useState(null);
+
+//   useEffect(() => {
+//     axios.get('http://localhost:3000/products')
+//       .then(response => {
+//         console.log(response.data)
+//         // setProducts(response.data);
+//       })
+//       .catch(error => {
+//         // setError(error.message);
+//         console.log('error occured')
+//       });
+//   }, []);
+
+//   return (
+//     <div>
+//       <h1>Products List</h1>
+      
+//     </div>
+//   );
+// }
+
+// export default ProductsList;
+
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Data from "../../data.json";
 
-const AUTH_TOKEN = {};
 interface Item {
   id: number;
   name: string;
-  quanity: number;
+  quantity: number;
   category: string;
   description: string;
   price: number;
@@ -19,7 +46,8 @@ const Products = () => {
   const [searchText, setSearchText] = useState("");
   const [data, setData] = useState<ItemResponse[]>([]);
   const [filteredData, setFilteredData] = useState<ItemResponse[]>([]);
-  const headerKeys = Object.keys(Data[0]);
+  const headerKeys = data[0] ? Object.keys(data[0].item) : [];
+  const token = localStorage.getItem('token')
   const filterByName = (name: string) => {
     const filteredData = data?.filter(({ item }: ItemResponse) =>
       item.name.toLowerCase().includes(name.toLowerCase())
@@ -30,12 +58,12 @@ const Products = () => {
     try {
       const response = await axios.get("http://localhost:3000/products", {
         headers: {
-          Authorization: `Bearer ${AUTH_TOKEN}`,
+          Authorization: `Bearer ${token}`,
         },
       });
-      console.log({ response });
+      console.log("Fetched Data:", response.data);
       if (response.status === 200) {
-        setData(response.data);
+        setData(response.data.products);
       }
     } catch (error) {
       console.log({ error });
@@ -49,14 +77,20 @@ const Products = () => {
     if (searchText !== "") {
       filterByName(searchText);
     } else {
-      setFilteredData(filteredData);
+      setFilteredData(data);
     }
-  }, [searchText]);
+  }, [searchText, data]);
   const tableData = searchText ? filteredData : data;
 
   return (
     <div className="products-container">
       <h1>All products</h1>
+      <input
+        type="text"
+        placeholder="Search by name"
+        onChange={(e) => setSearchText(e.target.value)}
+        className="search-input"
+      />
       <table className="products-table">
         <thead>
           <tr>
@@ -71,7 +105,7 @@ const Products = () => {
               <td>{item.name}</td>
               <td>{item.description}</td>
               <td>{item.price}</td>
-              <td>{item.quanity}</td>
+              <td>{item.quantity}</td>
             </tr>
           ))}
         </tbody>
