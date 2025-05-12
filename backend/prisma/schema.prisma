@@ -63,6 +63,7 @@ model Product{
   name String
   quantity Int
   category String
+  image String
   description String
   price Float
   is_active Boolean @default(true)

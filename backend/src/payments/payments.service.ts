@@ -2,6 +2,8 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import axios from 'axios';
+import { InitializePaymentDto } from './dto/initialize-payment.dto';
 
 @Injectable()
 export class PaymentsService {
@@ -53,5 +55,50 @@ export class PaymentsService {
 
   remove(id: number) {
     return this.prismaService.payment.delete({ where: { id } });
+  }
+  // 🔥 New Method: Initialize Khalti Payment
+  async initializeKhaltiPayment(details: InitializePaymentDto) {
+    const headersList = {
+      Authorization: `Key ${process.env.KHALTI_SECRET_KEY}`,
+      'Content-Type': 'application/json',
+    };
+
+    const reqOptions = {
+      url: `${process.env.KHALTI_GATEWAY_URL}/api/v2/epayment/initiate/`,
+      method: 'POST',
+      headers: headersList,
+      data: details,
+    };
+
+    try {
+      const response = await axios.request(reqOptions);
+      return response.data;
+    } catch (error) {
+      console.error('Error initializing Khalti payment:', error);
+      throw new BadRequestException('Failed to initiate payment');
+    }
+  }
+
+  // 🔥 New Method: Verify Khalti Payment
+  async verifyKhaltiPayment(pidx: string) {
+    const headersList = {
+      Authorization: `Key ${process.env.KHALTI_SECRET_KEY}`,
+      'Content-Type': 'application/json',
+    };
+
+    const reqOptions = {
+      url: `${process.env.KHALTI_GATEWAY_URL}/api/v2/epayment/lookup/`,
+      method: 'POST',
+      headers: headersList,
+      data: { pidx },
+    };
+
+    try {
+      const response = await axios.request(reqOptions);
+      return response.data;
+    } catch (error) {
+      console.error('Error verifying Khalti payment:', error);
+      throw new BadRequestException('Failed to verify payment');
+    }
   }
 }

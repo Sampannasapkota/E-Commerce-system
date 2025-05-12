@@ -8,7 +8,7 @@ interface User {
 
 interface UserContextType {
   user: User | null;
-  fetchUser: (id: number) => void;
+  fetchUser: () => void;
   clearUser: () => void;
 }
 const UserContext = createContext<UserContextType>({
@@ -25,25 +25,38 @@ const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const fetchUser = async () => {
     try {
-      const response = await api.get(`/auth/user`);
+      const userId = localStorage.getItem("userId");
+      if (!userId) return;
+
+      const response = await api.get(`/users/${userId}`);
       const userData: User = response.data;
       setUser(userData);
     } catch (error) {
       console.error("Error fetching user :", error);
     }
-    const clearUser = () => {
-      setUser(null);
-    };
-
-    useEffect(() => {
-      fetchUser();
-    }, []);
-
-    return (
-      <UserContext.Provider value={{ user, fetchUser, clearUser }}>
-        {children}
-      </UserContext.Provider>
-    );
   };
+  const clearUser = () => {
+    setUser(null);
+  };
+
+  useEffect(() => {
+    const storedFullname = localStorage.getItem("fullname");
+    const storedId = localStorage.getItem("userId");
+
+    if (storedId && storedFullname) {
+      setUser({
+        id: parseInt(storedId),
+        fullname: storedFullname,
+      });
+    } else {
+      fetchUser(); // fallback if no name found
+    }
+  }, []);
+
+  return (
+    <UserContext.Provider value={{ user, fetchUser, clearUser }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 export { UserProvider, UserContext };

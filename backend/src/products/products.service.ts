@@ -14,7 +14,7 @@ import { Products } from './entities/products.entity';
 @Injectable()
 export class ProductsService {
   constructor(private readonly prismaService: PrismaService) {}
-  async create(createProductDto: CreateProductDto) {
+  async create(createProductDto: CreateProductDto, image: string) {
     createProductDto.name = capitalizeFirstLetterOfEachWordInAPhrase(
       createProductDto.name,
     );
@@ -23,7 +23,16 @@ export class ProductsService {
         `Product ${createProductDto.name} already exists`,
       );
     }
-    return this.prismaService.product.create({ data: createProductDto });
+    createProductDto.image = image;
+    // return this.prismaService.product.create({ data: createProductDto });
+    return this.prismaService.product.create({
+      data: {
+        ...createProductDto,
+        seller_id: Number(createProductDto.seller_id),
+        quantity: Number(createProductDto.quantity),
+        price: Number(createProductDto.price),
+      },
+    });
   }
 
   async findAll(query: CommonQuery): Promise<Products> {

@@ -42,6 +42,11 @@ export class AuthService {
     const token = await this.jwtService.signAsync(user);
     return {
       token,
+      user: {
+        id: user.id,
+        email: user.email,
+        fullname: user.fullname,
+      },
     };
   }
   //for register
@@ -52,6 +57,11 @@ export class AuthService {
     const token = await this.jwtService.signAsync(user);
     return {
       token,
+      user: {
+        id: user.id,
+        email: user.email,
+        fullname: user.fullname,
+      },
     };
   }
   async getUserProfile(userId: number) {

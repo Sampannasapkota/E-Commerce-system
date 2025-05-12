@@ -1,0 +1,45 @@
+/* Dashboard.css
+
+.dashboard-container {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 20px;
+  font-family: "Poppins", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+}
+
+.dashboard-container h1 {
+  font-size: 32px;
+  color: #4caf50;
+  margin-bottom: 10px;
+}
+
+.private-message {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 40px;
+}
+.dashboard-username {
+  font-size: 24px;
+  color: #4caf50;
+  margin-bottom: 10px;
+} */
+.dashboard {
+  padding: 2rem;
+  background-color: #f9f9f9;
+}
+
+.dashboard-header {
+  margin-bottom: 1.5rem;
+}
+
+.username {
+  color: #d73333;
+  font-weight: bold;
+}
+h2 {
+  color: black;
+}
+p {
+  color: black;
+}
