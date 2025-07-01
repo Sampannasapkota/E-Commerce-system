@@ -10,7 +10,6 @@ import {
   capitalizeFirstLetterOfEachWordInAPhrase,
   capitalizeFirstLetterOfWord,
 } from 'src/helper/capitalize';
-import { RolesService } from 'src/roles/roles.service';
 import { hash } from 'bcrypt';
 import { CommonQuery } from 'src/interfaces/query.interface';
 import { Users } from './entities/users.entity';
@@ -19,14 +18,7 @@ import { Users } from './entities/users.entity';
 export class UsersService {
   constructor(private readonly prismaService: PrismaService) {}
   async create(createUserDto: CreateUserDto) {
-    const roleObj = await this.prismaService.role.findFirst({
-      where: { name: createUserDto.role },
-    });
-    if (!roleObj) {
-      throw new NotFoundException(`Unable to find role ${createUserDto.role}`);
-    }
-    createUserDto.role_id = roleObj.id;
-    const { role, ...rest } = createUserDto;
+    const { ...rest } = createUserDto;
     rest.fullname = capitalizeFirstLetterOfEachWordInAPhrase(rest.fullname);
 
     if (await this.checkIfEmailExist(rest.email)) {
@@ -82,7 +74,7 @@ export class UsersService {
     if (!(await this.checkIfUserExist(updateUserDto.fullname, id))) {
       throw new BadRequestException('This user already exist');
     }
-    const { role, ...rest } = updateUserDto;
+    const { ...rest } = updateUserDto;
     if (!(await this.checkIfEmailExist(updateUserDto.email, id))) {
       throw new BadRequestException(
         `User ${updateUserDto.email} has already been taken`,

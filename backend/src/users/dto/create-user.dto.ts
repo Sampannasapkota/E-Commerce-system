@@ -12,14 +12,6 @@ export class CreateUserDto {
   @IsString()
   fullname: string;
 
-  @IsOptional()
-  @IsNumber()
-  role_id: number;
-
-  @IsNotEmpty()
-  @IsString()
-  role: string;
-
   @IsNotEmpty()
   @IsString()
   email: string;

@@ -13,26 +13,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Role{
-  @@map("roles")
-  id Int @id() @default(autoincrement())
-  name String @unique()
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
-  users User[]
-  sellers Seller[]
-  
-}
+
 model User{
   @@map("users")
   id Int  @id() @default(autoincrement())
-  role_id Int
   fullname String
   email String @unique
   mobile String @unique
   address String
   password String
-  role Role @relation(fields: [role_id], references: [id])
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
   carts Cart[]
@@ -40,15 +29,15 @@ model User{
 }
 model Seller{
   @@map("sellers")
-  id Int @id() @default(autoincrement())
-  role_id Int 
+  id Int @id() @default(autoincrement()) 
   fullname String
   email String @unique()
   phone_no String @unique()
   pan_no String @unique()
+  shop_name String
+  shop_type Shop_Type @default(wholesale)
   address String
   password String 
-  role Role @relation(references: [id], fields: [role_id])
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
   products Product[]
@@ -134,4 +123,8 @@ enum Payment_Status{
   pending
   failed
   completed
+}
+enum Shop_Type{
+  wholesale
+  retail
 }

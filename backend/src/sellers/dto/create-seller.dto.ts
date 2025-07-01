@@ -5,10 +5,6 @@ export class CreateSellerDto {
   @IsNotEmpty()
   fullname: string;
 
-  @IsNumber()
-  @IsNotEmpty()
-  role_id: number
-
   @IsString()
   @IsNotEmpty()
   email: string;
@@ -16,6 +12,10 @@ export class CreateSellerDto {
   @IsString()
   @IsNotEmpty()
   phone_no: string;
+
+  @IsString()
+  @IsNotEmpty()
+  shop_name: string;
 
   @IsString()
   @IsNotEmpty()

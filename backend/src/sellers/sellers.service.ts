@@ -7,17 +7,19 @@ import { CreateSellerDto } from './dto/create-seller.dto';
 import { UpdateSellerDto } from './dto/update-seller.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { capitalizeFirstLetterOfEachWordInAPhrase } from 'src/helper/capitalize';
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class SellersService {
   constructor(private readonly prismaService: PrismaService) {}
   async create(createSellerDto: CreateSellerDto) {
-    const roleObj = await this.prismaService.role.findFirst({
-      where: { id: createSellerDto.role_id },
-    });
-    if (!roleObj) {
-      throw new NotFoundException(`Unable to find role`);
-    }
+    const data = {
+      ...createSellerDto,
+      password: await hash(createSellerDto.password, 10),
+      fullname: capitalizeFirstLetterOfEachWordInAPhrase(
+        createSellerDto.fullname,
+      ),
+    };
     if (await this.checkIfEmailExist(createSellerDto.email)) {
       throw new BadRequestException(`Email is already taken`);
     }
@@ -28,10 +30,8 @@ export class SellersService {
       throw new BadRequestException(`Seller of entered PAN already registered`);
     }
 
-    createSellerDto.fullname = capitalizeFirstLetterOfEachWordInAPhrase(
-      createSellerDto.fullname,
-    );
-    return this.prismaService.seller.create({ data: createSellerDto });
+    createSellerDto.password = await hash(createSellerDto.password, 10);
+    return this.prismaService.seller.create({ data });
   }
 
   findAll() {
